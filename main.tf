@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region = var.region
 }
 
 resource "random_pet" "petname" {
@@ -47,6 +47,3 @@ resource "aws_s3_bucket_object" "index" {
 
 }
 
-output "website_endpoint" {
-  value = "http://${aws_s3_bucket.bucket.website_endpoint}/index.html"
-}
