@@ -1,2 +1,2 @@
-prod_region = "us-east-1"
-dev_region  = "us-east-2"
+region = "us-east-2"
+prefix = "dev"
