@@ -1,10 +1,14 @@
 provider "aws" {
-  region = var.prod_region
+  region = var.region
 }
 
+resource "random_pet" "petname" {
+  length    = 3
+  separator = "-"
+}
 
-resource "aws_s3_bucket" "prod" {
-  bucket = "${var.prod_prefix}-${random_pet.petname.id}"
+resource "aws_s3_bucket" "bucket" {
+  bucket = "${var.prefix}-${random_pet.petname.id}"
   acl    = "public-read"
 
   policy = <<EOF
@@ -19,7 +23,7 @@ resource "aws_s3_bucket" "prod" {
                 "s3:GetObject"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.prod_prefix}-${random_pet.petname.id}/*"
+                "arn:aws:s3:::${var.prefix}-${random_pet.petname.id}/*"
             ]
         }
     ]
@@ -34,11 +38,11 @@ EOF
   force_destroy = true
 }
 
-resource "aws_s3_bucket_object" "prod" {
+resource "aws_s3_bucket_object" "webapp" {
   acl          = "public-read"
   key          = "index.html"
-  bucket       = aws_s3_bucket.prod.id
-  content      = file("${path.module}/assets/index.html")
+  bucket       = aws_s3_bucket.bucket.id
+  content      = file("${path.module}/../assets/index.html")
   content_type = "text/html"
 
 }
