@@ -1,24 +1,3 @@
-variable "prod_region" {
-  description = "This is where your EC2 instance will be deployed."
-}
-
-variable "dev_region" {
-  description = "This is where your EC2 instance will be deployed."
-}
-
-variable "dev_prefix" {
-  default = "dev"
-}
-
-variable "prod_prefix" {
-  default = "prod"
-}
-
-provider "aws" {
-  region = var.dev_region
-  alias  = "dev"
-}
-
 resource "random_pet" "petname_dev" {
   length    = 3
   separator = "-"
