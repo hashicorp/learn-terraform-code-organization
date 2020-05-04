@@ -1,3 +1,12 @@
+provider "aws" {
+  region = var.prod_region
+}
+
+provider "aws" {
+  region = var.dev_region
+  alias  = "dev"
+}
+
 resource "random_pet" "petname" {
   length    = 3
   separator = "-"
