@@ -1,11 +1,7 @@
 provider "aws" {
-  region = var.prod_region
+  region = var.region
 }
 
-provider "aws" {
-  region = var.dev_region
-  alias  = "test_region"
-}
 
 resource "random_pet" "petname" {
   length    = 3
@@ -13,9 +9,8 @@ resource "random_pet" "petname" {
 }
 
 resource "aws_s3_bucket" "dev" {
-  provider = aws.test_region
-  bucket   = "${var.dev_prefix}-${random_pet.petname.id}"
-  acl      = "public-read"
+  bucket = "${var.dev_prefix}-${random_pet.petname.id}"
+  acl    = "public-read"
 
   policy = <<EOF
 {
@@ -45,7 +40,6 @@ EOF
 }
 
 resource "aws_s3_bucket_object" "dev" {
-  provider     = aws.test_region
   acl          = "public-read"
   key          = "index.html"
   bucket       = aws_s3_bucket.dev.id
