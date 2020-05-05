@@ -3,9 +3,9 @@ variable "region" {
 }
 
 variable "dev_prefix" {
-  default = "dev"
+  description = "This is the environment where your webapp is deployed. qa, prod, or dev"
 }
 
 variable "prod_prefix" {
-  default = "prod"
+  description = "This is the environment where your webapp is deployed. qa, prod, or dev"
 }
