@@ -1,7 +1,16 @@
 provider "aws" {
-  region = var.region
-}
+  region                      = "us-west-2"
+  access_key                  = "anaccesskey"
+  secret_key                  = "asecretkey"
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  s3_force_path_style         = true
+  skip_requesting_account_id  = true
 
+  endpoints {
+    s3 = "http://localhost:4572"
+  }
+}
 
 resource "random_pet" "petname" {
   length    = 3
@@ -75,7 +84,7 @@ EOF
     index_document = "index.html"
     # error_document = "error.html"
   }
-  
+
   force_destroy = true
 }
 
