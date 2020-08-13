@@ -43,7 +43,7 @@ resource "aws_s3_bucket_object" "dev" {
   acl          = "public-read"
   key          = "index.html"
   bucket       = aws_s3_bucket.dev.id
-  content      = file("${path.module}/assets/terramino.html")
+  content      = file("${path.module}/assets/index.html")
   content_type = "text/html"
 
 }
