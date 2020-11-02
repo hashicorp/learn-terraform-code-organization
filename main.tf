@@ -1,7 +1,9 @@
 provider "aws" {
-  region                      = "us-west-2"
-  access_key                  = "anaccesskey"
-  secret_key                  = "asecretkey"
+  region = "us-west-2"
+
+  ## v Everything between the comments is localstack specific v
+  access_key                  = "test"
+  secret_key                  = "test"
   skip_credentials_validation = true
   skip_metadata_api_check     = true
   s3_force_path_style         = true
@@ -10,6 +12,7 @@ provider "aws" {
   endpoints {
     s3 = "http://localhost:4572"
   }
+  ## ^ Everything between the comments is localstack specific ^
 }
 
 resource "random_pet" "petname" {
