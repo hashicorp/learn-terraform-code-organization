@@ -1,11 +1,14 @@
 variable "region" {
-  description = "This is the cloud hosting region where your webapp will be deployed."
+  description = "AWS region for all resources"
+  default     = "us-west-2"
 }
 
 variable "dev_prefix" {
-  description = "This is the environment where your webapp is deployed. qa, prod, or dev"
+  description = "Prefix for S3 buckets in the dev environment"
+  default     = "dev"
 }
 
 variable "prod_prefix" {
-  description = "This is the environment where your webapp is deployed. qa, prod, or dev"
+  description = "Prefix for S3 buckets in the prod environment"
+  default     = "prod"
 }
