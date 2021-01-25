@@ -1,3 +1,3 @@
-region  = "us-east-2"
-dev_prefix  = "dev"
+region     = "us-east-2"
+dev_prefix = "dev"
 
