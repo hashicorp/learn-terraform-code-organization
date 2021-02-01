@@ -1,7 +1,14 @@
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+  }
+}
+
 provider "aws" {
   region = var.region
 }
-
 
 resource "random_pet" "petname" {
   length    = 3
