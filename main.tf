@@ -15,13 +15,8 @@ provider "aws" {
   ## ^ Everything between the comments is localstack specific ^
 }
 
-resource "random_pet" "petname" {
-  length    = 3
-  separator = "-"
-}
-
 resource "aws_s3_bucket" "dev" {
-  bucket = "${var.dev_prefix}-${random_pet.petname.id}"
+  bucket = var.dev_prefix
   acl    = "public-read"
 
   policy = <<EOF
@@ -36,7 +31,7 @@ resource "aws_s3_bucket" "dev" {
                 "s3:GetObject"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.dev_prefix}-${random_pet.petname.id}/*"
+                "arn:aws:s3:::${var.dev_prefix}/*"
             ]
         }
     ]
@@ -61,7 +56,7 @@ resource "aws_s3_bucket_object" "dev" {
 }
 
 resource "aws_s3_bucket" "prod" {
-  bucket = "${var.prod_prefix}-${random_pet.petname.id}"
+  bucket = var.prod_prefix
   acl    = "public-read"
 
   policy = <<EOF
@@ -76,7 +71,7 @@ resource "aws_s3_bucket" "prod" {
                 "s3:GetObject"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.prod_prefix}-${random_pet.petname.id}/*"
+                "arn:aws:s3:::${var.prod_prefix}/*"
             ]
         }
     ]
