@@ -2,14 +2,12 @@ provider "aws" {
   region = var.region
 }
 
-
-resource "random_pet" "petname" {
-  length    = 3
-  separator = "-"
+locals {
+  bucket_name = "bucket"
 }
 
 resource "aws_s3_bucket" "dev" {
-  bucket = "${var.dev_prefix}-${random_pet.petname.id}"
+  bucket = "${var.dev_prefix}-${local.bucket_name}"
   acl    = "public-read"
 
   policy = <<EOF
@@ -24,7 +22,7 @@ resource "aws_s3_bucket" "dev" {
                 "s3:GetObject"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.dev_prefix}-${random_pet.petname.id}/*"
+                "arn:aws:s3:::${var.dev_prefix}-${local.bucket_name}/*"
             ]
         }
     ]
