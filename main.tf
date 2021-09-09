@@ -15,8 +15,12 @@ provider "aws" {
   ## ^ Everything between the comments is localstack specific ^
 }
 
+locals {
+  bucket_name = "bucket"
+}
+
 resource "aws_s3_bucket" "dev" {
-  bucket = var.dev_prefix
+  bucket = "${var.dev_prefix}-${local.bucket_name}"
   acl    = "public-read"
 
   policy = <<EOF
@@ -31,7 +35,7 @@ resource "aws_s3_bucket" "dev" {
                 "s3:GetObject"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.dev_prefix}/*"
+                "arn:aws:s3:::${var.dev_prefix}-${local.bucket_name}/*"
             ]
         }
     ]
@@ -55,7 +59,7 @@ resource "aws_s3_bucket_object" "dev" {
 }
 
 resource "aws_s3_bucket" "prod" {
-  bucket = var.prod_prefix
+  bucket = "${var.prod_prefix}-${local.bucket_name}"
   acl    = "public-read"
 
   policy = <<EOF
@@ -70,7 +74,7 @@ resource "aws_s3_bucket" "prod" {
                 "s3:GetObject"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.prod_prefix}/*"
+                "arn:aws:s3:::${var.prod_prefix}-${local.bucket_name}/*"
             ]
         }
     ]
