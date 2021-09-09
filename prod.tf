@@ -1,8 +1,28 @@
 /*
-provider "aws" {
- region = var.region
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+  }
 }
 
+provider "aws" {
+  region = "us-west-2"
+
+  ## v Everything between the comments is localstack specific v
+  access_key                  = "test"
+  secret_key                  = "test"
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  s3_force_path_style         = true
+  skip_requesting_account_id  = true
+
+  endpoints {
+    s3 = "http://localhost:4566"
+  }
+  ## ^ Everything between the comments is localstack specific ^
+}
 
 locals {
   bucket_name = "bucket"
