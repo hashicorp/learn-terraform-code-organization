@@ -24,11 +24,7 @@ provider "aws" {
 }
 
 locals {
-  bucket_name = "bucket"
-}
-
-locals {
-  bucket_name = "bucket"
+  bucket_name = "bucket-new"
 }
 
 resource "aws_s3_bucket" "dev" {

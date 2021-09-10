@@ -25,7 +25,7 @@ provider "aws" {
 }
 
 locals {
-  bucket_name = "bucket"
+  bucket_name = "bucket-new"
 }
 */
 
