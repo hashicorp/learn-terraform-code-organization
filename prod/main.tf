@@ -1,16 +1,34 @@
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+  }
+}
+
 provider "aws" {
-  region = var.region
+  region = "us-west-2"
+
+  ## v Everything between the comments is localstack specific v
+  access_key                  = "test"
+  secret_key                  = "test"
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  s3_force_path_style         = true
+  skip_requesting_account_id  = true
+
+  endpoints {
+    s3 = "http://localhost:4566"
+  }
+  ## ^ Everything between the comments is localstack specific ^
 }
 
-
-resource "random_pet" "petname" {
-  length    = 3
-  separator = "-"
+locals {
+  bucket_name = "bucket-new"
 }
-
 
 resource "aws_s3_bucket" "prod" {
-  bucket = "${var.prod_prefix}-${random_pet.petname.id}"
+  bucket = "${var.prod_prefix}-${local.bucket_name}"
   acl    = "public-read"
 
   policy = <<EOF
@@ -25,7 +43,7 @@ resource "aws_s3_bucket" "prod" {
                 "s3:GetObject"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.prod_prefix}-${random_pet.petname.id}/*"
+                "arn:aws:s3:::${var.prod_prefix}-${local.bucket_name}/*"
             ]
         }
     ]
