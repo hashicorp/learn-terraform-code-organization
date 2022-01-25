@@ -2,7 +2,12 @@
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
+      version = "~> 3.73.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.1.0"
     }
   }
 }
@@ -29,10 +34,20 @@ locals {
 }
 */
 
-
 resource "aws_s3_bucket" "prod" {
   bucket = "${var.prod_prefix}-${local.bucket_name}"
   acl    = "public-read"
+
+  website {
+    index_document = "index.html"
+    error_document = "error.html"
+  }
+
+  force_destroy = true
+}
+
+resource "aws_s3_bucket_policy" "prod" {
+  bucket = aws_s3_bucket.prod.id
 
   policy = <<EOF
 {
@@ -46,19 +61,12 @@ resource "aws_s3_bucket" "prod" {
                 "s3:GetObject"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.prod_prefix}-${local.bucket_name}/*"
+                "arn:aws:s3:::${aws_s3_bucket.prod.id}/*"
             ]
         }
     ]
 }
 EOF
-
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-
-  }
-  force_destroy = true
 }
 
 resource "aws_s3_bucket_object" "prod" {
@@ -67,5 +75,4 @@ resource "aws_s3_bucket_object" "prod" {
   bucket       = aws_s3_bucket.prod.id
   content      = file("${path.module}/assets/index.html")
   content_type = "text/html"
-
 }
