@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.73.0"
+      version = "~> 4.0.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -67,7 +67,7 @@ resource "aws_s3_bucket_policy" "prod" {
 EOF
 }
 
-resource "aws_s3_bucket_object" "prod" {
+resource "aws_s3_object" "prod" {
   acl          = "public-read"
   key          = "index.html"
   bucket       = aws_s3_bucket.prod.id
