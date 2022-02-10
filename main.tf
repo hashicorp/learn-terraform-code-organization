@@ -34,19 +34,29 @@ locals {
 
 resource "aws_s3_bucket" "bucket" {
   bucket = "${var.prefix}-${local.bucket_name}"
-  acl    = "public-read"
-
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-  }
-
   force_destroy = true
 }
 
-resource "aws_s3_bucket_policy" "policy" {
+resource "aws_s3_bucket_website_configuration" "bucket" {
   bucket = aws_s3_bucket.bucket.id
 
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+}
+
+resource "aws_s3_bucket_acl" "bucket" {
+  bucket = aws_s3_bucket.bucket.id
+
+  acl = "public-read"
+}
+
+resource "aws_s3_bucket_policy" "bucket" {
+  bucket = aws_s3_bucket.bucket.id
   policy = <<EOF
 {
     "Version": "2012-10-17",
