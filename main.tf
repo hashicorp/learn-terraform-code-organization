@@ -22,14 +22,26 @@ resource "random_pet" "petname" {
 
 resource "aws_s3_bucket" "dev" {
   bucket = "${var.dev_prefix}-${random_pet.petname.id}"
-  acl    = "public-read"
-
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-  }
 
   force_destroy = true
+}
+
+resource "aws_s3_bucket_website_configuration" "dev" {
+  bucket = aws_s3_bucket.dev.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+}
+
+resource "aws_s3_bucket_acl" "dev" {
+  bucket = aws_s3_bucket.dev.id
+
+  acl = "public-read"
 }
 
 resource "aws_s3_bucket_policy" "dev" {
@@ -64,14 +76,26 @@ resource "aws_s3_object" "dev" {
 
 resource "aws_s3_bucket" "prod" {
   bucket = "${var.prod_prefix}-${random_pet.petname.id}"
-  acl    = "public-read"
-
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-  }
 
   force_destroy = true
+}
+
+resource "aws_s3_bucket_website_configuration" "prod" {
+  bucket = aws_s3_bucket.prod.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+}
+
+resource "aws_s3_bucket_acl" "prod" {
+  bucket = aws_s3_bucket.prod.id
+
+  acl = "public-read"
 }
 
 resource "aws_s3_bucket_policy" "prod" {
