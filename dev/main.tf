@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "~> 4.0.0"
     }
     random = {
@@ -22,19 +22,30 @@ resource "random_pet" "petname" {
 
 resource "aws_s3_bucket" "dev" {
   bucket = "${var.dev_prefix}-${random_pet.petname.id}"
-  acl    = "public-read"
-
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-  }
 
   force_destroy = true
 }
 
-resource "aws_s3_bucket_policy" "dev" {
+resource "aws_s3_bucket_website_configuration" "dev" {
   bucket = aws_s3_bucket.dev.id
 
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+}
+
+resource "aws_s3_bucket_acl" "dev" {
+  bucket = aws_s3_bucket.dev.id
+
+  acl = "public-read"
+}
+
+resource "aws_s3_bucket_policy" "dev" {
+  bucket = aws_s3_bucket.dev.id
   policy = <<EOF
 {
     "Version": "2012-10-17",
