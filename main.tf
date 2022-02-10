@@ -1,7 +1,12 @@
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
+      version = "~> 4.0.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.1.0"
     }
   }
 }
@@ -29,8 +34,29 @@ locals {
 
 resource "aws_s3_bucket" "bucket" {
   bucket = "${var.prefix}-${local.bucket_name}"
-  acl    = "public-read"
+  force_destroy = true
+}
 
+resource "aws_s3_bucket_website_configuration" "bucket" {
+  bucket = aws_s3_bucket.bucket.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+}
+
+resource "aws_s3_bucket_acl" "bucket" {
+  bucket = aws_s3_bucket.bucket.id
+
+  acl = "public-read"
+}
+
+resource "aws_s3_bucket_policy" "bucket" {
+  bucket = aws_s3_bucket.bucket.id
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -43,27 +69,18 @@ resource "aws_s3_bucket" "bucket" {
                 "s3:GetObject"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.prefix}-${local.bucket_name}/*"
+                "arn:aws:s3:::${aws_s3_bucket.bucket.id}/*"
             ]
         }
     ]
 }
 EOF
-
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-
-  }
-  force_destroy = true
 }
 
-resource "aws_s3_bucket_object" "webapp" {
+resource "aws_s3_object" "webapp" {
   acl          = "public-read"
   key          = "index.html"
   bucket       = aws_s3_bucket.bucket.id
   content      = file("${path.module}/assets/index.html")
   content_type = "text/html"
-
 }
-
