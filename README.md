@@ -1,5 +1,4 @@
 # Learn Terraform Code Organization
 
-Learn best practices for Terraform as your organization grows. Split a Dev & Prod environment and compose shared modules.
-
-Follow along with the [Learn guide](https://learn.hashicorp.com/tutorials/terraform/organize-configuration?in=terraform/modules) at HashiCorp Learn.
+This repo is a companion repo to the [Learn Terraform Code Organization](https://developer.hashicorp.com/terraform/tutorials/modules/organize-configuration) tutorial.
+It contains Terraform configuration you can use to learn best practices for Terraform as your organization grows.
