@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 variable "region" {
   description = "This is the cloud hosting region where your webapp will be deployed."
 }
